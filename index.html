@@ -109,8 +109,8 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
-            text-align: center;
+            align-items: flex-start;
+            text-align: left;
             position: relative;
         }
 
@@ -159,25 +159,41 @@
 
         .hero-name .glitch::before,
         .hero-name .glitch::after {
-            content: 'PATENTT';
+            content: attr(data-decrypt);
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            opacity: 0.8;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .hero-name .glitch.decrypted::before,
+        .hero-name .glitch.decrypted::after {
+            opacity: 1;
+        }
+
+        .hero-name .glitch.decrypted::before {
+            opacity: 0.7;
+        }
+
+        .hero-name .glitch.decrypted::after {
+            opacity: 0.4;
         }
 
         .hero-name .glitch::before {
             color: var(--royal-blue);
+            left: -4px;
+            text-shadow: 0 0 20px var(--royal-blue);
             animation: glitch-1 3s infinite linear alternate-reverse;
-            clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
         }
 
         .hero-name .glitch::after {
             color: var(--forest-white);
+            left: 4px;
             animation: glitch-2 2s infinite linear alternate-reverse;
-            clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
         }
 
         .hero-title {
@@ -272,15 +288,19 @@
         .scroll-indicator {
             position: absolute;
             bottom: 3rem;
-            left: 50%;
-            transform: translateX(-50%);
+            left: 2rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 0.5rem;
-            animation: fadeInUp 0.8s ease forwards, float 2s ease-in-out infinite;
+            animation: fadeInUp 0.8s ease forwards, floatY 2s ease-in-out infinite;
             animation-delay: 1.2s, 1.2s;
             opacity: 0;
+        }
+
+        @keyframes floatY {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .scroll-indicator span {
@@ -498,6 +518,96 @@
             border: 1px solid rgba(65, 105, 225, 0.1);
             border-radius: 16px;
             overflow: hidden;
+            position: relative;
+            transition: border-color 0.3s ease;
+        }
+
+        .specs-block:hover {
+            border-color: rgba(65, 105, 225, 0.4);
+        }
+
+        .specs-block .aurora-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .specs-block .specs-header,
+        .specs-block .specs-list {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Aurora gradient for symbols */
+        .aurora-char {
+            position: absolute;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: rgba(65, 105, 225, 0.1);
+            user-select: none;
+            transition: opacity 0.15s ease;
+        }
+
+        .aurora-char.lit {
+            background: linear-gradient(135deg, #4169e1, #00d4aa, #a855f7, #ff6b6b);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: auroraShift 2s ease infinite;
+        }
+
+        @keyframes auroraShift {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 50% 100%; }
+            50% { background-position: 100% 50%; }
+            75% { background-position: 50% 0%; }
+        }
+
+        /* Project card aurora effect */
+        .project-item {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-item .aurora-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .project-item > *:not(.aurora-container) {
+            position: relative;
+            z-index: 1;
+        }
+
+        .project-members {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--code-green);
+            margin-top: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .project-members::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--code-green);
+            border-radius: 50%;
+            animation: pulse 2s ease infinite;
         }
 
         .specs-header {
@@ -621,6 +731,23 @@
 
         .footer-text span {
             color: var(--royal-blue);
+        }
+
+        .footer-inspired {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        .footer-inspired a {
+            color: var(--royal-blue);
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .footer-inspired a:hover {
+            opacity: 0.7;
         }
 
         /* Animations */
@@ -747,7 +874,7 @@
             </div>
             
             <h1 class="hero-name">
-                <span class="glitch">PATENTT</span>
+                <span class="glitch" data-decrypt="PATENTT">PATENTT</span>
             </h1>
             
             <p class="hero-title"><span>//</span> DEVELOPER <span>&</span> CS PLAYER</p>
@@ -842,11 +969,13 @@
             </div>
             
             <div class="projects-list">
-                <div class="project-item fade-in">
+                <div class="project-item fade-in" data-aurora="true">
+                    <div class="aurora-container"></div>
                     <div class="project-status"></div>
                     <div class="project-info">
                         <h3>PolarisMC 4421</h3>
                         <p>Minecraft server development — crafting unique gameplay experiences and server infrastructure</p>
+                        <div class="project-members">4,421 members</div>
                     </div>
                     <span class="project-role">DEVELOPER</span>
                 </div>
@@ -882,7 +1011,8 @@
             </div>
             
             <div class="specs-container">
-                <div class="specs-block fade-in">
+                <div class="specs-block fade-in" data-aurora="true">
+                    <div class="aurora-canvas"></div>
                     <div class="specs-header">
                         <span class="specs-header-icon">🖥️</span>
                         <h3>Main PC</h3>
@@ -907,7 +1037,8 @@
                     </div>
                 </div>
                 
-                <div class="specs-block fade-in">
+                <div class="specs-block fade-in" data-aurora="true">
+                    <div class="aurora-canvas"></div>
                     <div class="specs-header">
                         <span class="specs-header-icon">⌨️</span>
                         <h3>Peripherals</h3>
@@ -952,6 +1083,7 @@
         <div class="container">
             <div class="footer-logo">PATENTT</div>
             <p class="footer-text">Built with <span>♥</span> and caffeine</p>
+            <p class="footer-inspired">inspired by <a href="https://neokcs.com" target="_blank">neokcs.com</a></p>
         </div>
     </footer>
 
@@ -1027,6 +1159,146 @@
                     behavior: 'smooth'
                 });
             });
+        });
+
+        // Aurora Symbol Background Effect
+        const auroraSymbols = '{}[]<>/*-+=#@$%^&|~`;:!?→←↑↓◆◇○●□■△▽₿∞∑√≈≠≤≥';
+        const auroraElements = document.querySelectorAll('[data-aurora="true"]');
+        
+        auroraElements.forEach(element => {
+            const container = element.querySelector('.aurora-canvas, .aurora-container');
+            if (!container) return;
+            
+            const cellWidth = 20;
+            const cellHeight = 22;
+            let symbols = [];
+            let isHovering = false;
+            let mouseX = 0;
+            let mouseY = 0;
+            
+            function createSymbols() {
+                container.innerHTML = '';
+                symbols = [];
+                
+                const rect = element.getBoundingClientRect();
+                const cols = Math.ceil(rect.width / cellWidth);
+                const rows = Math.ceil(rect.height / cellHeight);
+                
+                for (let row = 0; row < rows; row++) {
+                    for (let col = 0; col < cols; col++) {
+                        const span = document.createElement('span');
+                        span.className = 'aurora-char';
+                        span.textContent = auroraSymbols[Math.floor(Math.random() * auroraSymbols.length)];
+                        
+                        const x = col * cellWidth;
+                        const y = row * cellHeight;
+                        
+                        span.style.left = x + 'px';
+                        span.style.top = y + 'px';
+                        
+                        container.appendChild(span);
+                        symbols.push({
+                            el: span,
+                            centerX: x + cellWidth / 2,
+                            centerY: y + cellHeight / 2
+                        });
+                    }
+                }
+            }
+            
+            createSymbols();
+            
+            function updateGlow() {
+                if (!isHovering) return;
+                
+                const rect = element.getBoundingClientRect();
+                const relX = mouseX - rect.left;
+                const relY = mouseY - rect.top;
+                const radius = 100;
+                
+                symbols.forEach(symbol => {
+                    const dx = symbol.centerX - relX;
+                    const dy = symbol.centerY - relY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < radius) {
+                        const opacity = 1 - (distance / radius);
+                        symbol.el.classList.add('lit');
+                        symbol.el.style.opacity = opacity;
+                        if (Math.random() < 0.008) {
+                            symbol.el.textContent = auroraSymbols[Math.floor(Math.random() * auroraSymbols.length)];
+                        }
+                    } else {
+                        symbol.el.classList.remove('lit');
+                        symbol.el.style.opacity = '';
+                    }
+                });
+                
+                requestAnimationFrame(updateGlow);
+            }
+            
+            element.addEventListener('mouseenter', () => {
+                isHovering = true;
+                requestAnimationFrame(updateGlow);
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                isHovering = false;
+                symbols.forEach(s => {
+                    s.el.classList.remove('lit');
+                    s.el.style.opacity = '';
+                });
+            });
+            
+            element.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+            
+            window.addEventListener('resize', createSymbols);
+        });
+
+        // Evervault-style Decrypt Text Effect
+        const decryptChars = '!@#$%^&*()_+-=[]{}|;:,.<>?/~`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        const decryptElements = document.querySelectorAll('[data-decrypt]');
+        
+        decryptElements.forEach(el => {
+            const originalText = el.getAttribute('data-decrypt');
+            const duration = 2000;
+            const frameRate = 30;
+            const totalFrames = duration / (1000 / frameRate);
+            let frame = 0;
+            
+            function decrypt() {
+                let output = '';
+                const progress = frame / totalFrames;
+                
+                for (let i = 0; i < originalText.length; i++) {
+                    const charProgress = (progress * originalText.length) - i;
+                    
+                    if (charProgress > 1) {
+                        output += originalText[i];
+                    } else if (charProgress > 0) {
+                        // Scrambling phase
+                        output += decryptChars[Math.floor(Math.random() * decryptChars.length)];
+                    } else {
+                        output += decryptChars[Math.floor(Math.random() * decryptChars.length)];
+                    }
+                }
+                
+                el.textContent = output;
+                frame++;
+                
+                if (frame <= totalFrames) {
+                    requestAnimationFrame(decrypt);
+                } else {
+                    el.textContent = originalText;
+                    el.classList.add('decrypted');
+                }
+            }
+            
+            // Start after a short delay
+            setTimeout(decrypt, 500);
         });
     </script>
 </body>

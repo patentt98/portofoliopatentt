@@ -3,23 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patentt | Developer</title>
+    <title>Patentt | Software Engineer & Founder</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #050508;
-            --bg-secondary: #0a0a0f;
-            --bg-tertiary: #101018;
-            --royal-blue: #4169e1;
-            --royal-blue-glow: rgba(65, 105, 225, 0.4);
-            --royal-blue-dim: rgba(65, 105, 225, 0.15);
-            --forest-white: #e8efe8;
-            --forest-white-dim: rgba(232, 239, 232, 0.6);
-            --text-primary: #e8efe8;
-            --text-secondary: rgba(232, 239, 232, 0.5);
-            --code-green: #4ade80;
+            --bg: #0a0a0a;
+            --surface: #111111;
+            --border: #222222;
+            --accent: #ffffff;
+            --text-main: #eeeeee;
+            --text-dim: #888888;
+            --mono: 'JetBrains Mono', monospace;
+            --sans: 'Inter', sans-serif;
         }
 
         * {
@@ -28,1278 +25,261 @@
             box-sizing: border-box;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
-            font-family: 'Space Grotesk', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--sans);
+            line-height: 1.6;
             overflow-x: hidden;
-            cursor: default;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-secondary);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--royal-blue);
-            border-radius: 3px;
-        }
-
-        /* Code Rain Canvas */
-        #code-rain {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            opacity: 0.07;
-            pointer-events: none;
-        }
-
-        /* Noise Overlay */
-        .noise-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.03;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-        }
-
-        /* Grid Lines */
-        .grid-lines {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-            background-image: 
-                linear-gradient(rgba(65, 105, 225, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(65, 105, 225, 0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-        }
-
-        /* Main Container */
         .container {
-            position: relative;
-            z-index: 10;
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 0 2rem;
         }
 
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            text-align: left;
-            position: relative;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: var(--royal-blue-dim);
-            border: 1px solid var(--royal-blue);
-            border-radius: 100px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            color: var(--royal-blue);
-            margin-bottom: 2rem;
-            animation: fadeInUp 0.8s ease forwards;
-            animation-delay: 0.2s;
-            opacity: 0;
-        }
-
-        .badge-dot {
-            width: 6px;
-            height: 6px;
-            background: var(--code-green);
-            border-radius: 50%;
-            animation: pulse 2s ease infinite;
-        }
-
-        .hero-name {
-            font-family: 'Syne', sans-serif;
-            font-size: clamp(4rem, 15vw, 12rem);
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            line-height: 0.9;
-            margin-bottom: 1.5rem;
-            position: relative;
-            animation: fadeInUp 0.8s ease forwards;
-            animation-delay: 0.4s;
-            opacity: 0;
-        }
-
-        .hero-name .glitch {
-            position: relative;
-            display: inline-block;
-        }
-
-        .hero-name .glitch::before,
-        .hero-name .glitch::after {
-            content: attr(data-decrypt);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .hero-name .glitch.decrypted::before,
-        .hero-name .glitch.decrypted::after {
-            opacity: 1;
-        }
-
-        .hero-name .glitch.decrypted::before {
-            opacity: 0.7;
-        }
-
-        .hero-name .glitch.decrypted::after {
-            opacity: 0.4;
-        }
-
-        .hero-name .glitch::before {
-            color: var(--royal-blue);
-            left: -4px;
-            text-shadow: 0 0 20px var(--royal-blue);
-            animation: glitch-1 3s infinite linear alternate-reverse;
-        }
-
-        .hero-name .glitch::after {
-            color: var(--forest-white);
-            left: 4px;
-            animation: glitch-2 2s infinite linear alternate-reverse;
-        }
-
-        .hero-title {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.25rem;
-            color: var(--text-secondary);
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            margin-bottom: 3rem;
-            animation: fadeInUp 0.8s ease forwards;
-            animation-delay: 0.6s;
-            opacity: 0;
-        }
-
-        .hero-title span {
-            color: var(--royal-blue);
-        }
-
-        .terminal-box {
-            background: var(--bg-secondary);
-            border: 1px solid rgba(65, 105, 225, 0.2);
-            border-radius: 12px;
-            padding: 1.5rem 2rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.875rem;
-            text-align: left;
-            max-width: 600px;
-            width: 100%;
-            animation: fadeInUp 0.8s ease forwards;
-            animation-delay: 0.8s;
-            opacity: 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .terminal-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--royal-blue), transparent);
-        }
-
-        .terminal-header {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(65, 105, 225, 0.1);
-        }
-
-        .terminal-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .terminal-dot.red { background: #ff5f56; }
-        .terminal-dot.yellow { background: #ffbd2e; }
-        .terminal-dot.green { background: #27ca40; }
-
-        .terminal-line {
-            display: flex;
-            margin-bottom: 0.5rem;
-        }
-
-        .terminal-prompt {
-            color: var(--royal-blue);
-            margin-right: 0.75rem;
-        }
-
-        .terminal-text {
-            color: var(--forest-white-dim);
-        }
-
-        .terminal-text .highlight {
-            color: var(--code-green);
-        }
-
-        .terminal-cursor {
-            display: inline-block;
-            width: 8px;
-            height: 16px;
-            background: var(--royal-blue);
-            animation: blink 1s step-end infinite;
-            margin-left: 2px;
-            vertical-align: middle;
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: 3rem;
-            left: 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            animation: fadeInUp 0.8s ease forwards, floatY 2s ease-in-out infinite;
-            animation-delay: 1.2s, 1.2s;
-            opacity: 0;
-        }
-
-        @keyframes floatY {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .scroll-indicator span {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-            letter-spacing: 0.1em;
-        }
-
-        .scroll-arrow {
-            width: 20px;
-            height: 20px;
-            border-right: 2px solid var(--royal-blue);
-            border-bottom: 2px solid var(--royal-blue);
-            transform: rotate(45deg);
-        }
-
-        /* Section Styles */
-        section {
-            padding: 8rem 0;
-            position: relative;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            margin-bottom: 4rem;
-        }
-
-        .section-number {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.875rem;
-            color: var(--royal-blue);
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--royal-blue);
-            border-radius: 4px;
-        }
-
-        .section-title {
-            font-family: 'Syne', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
-        .section-line {
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, var(--royal-blue-dim), transparent);
-        }
-
-        /* About Section */
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-        }
-
-        .about-card {
-            background: var(--bg-secondary);
-            border: 1px solid rgba(65, 105, 225, 0.1);
-            border-radius: 16px;
-            padding: 2rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
-        }
-
-        .about-card:hover {
-            border-color: var(--royal-blue);
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(65, 105, 225, 0.1);
-        }
-
-        .about-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--royal-blue), var(--code-green));
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .about-card:hover::before {
-            opacity: 1;
-        }
-
-        .about-card-icon {
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--royal-blue-dim);
-            border-radius: 12px;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
-
-        .about-card-title {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-
-        .about-card-text {
-            color: var(--text-secondary);
-            line-height: 1.7;
-            font-size: 0.95rem;
-        }
-
-        .about-card-tag {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            background: var(--royal-blue-dim);
-            border-radius: 100px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--royal-blue);
-            margin-top: 1rem;
-        }
-
-        /* Projects Section */
-        .projects-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .project-item {
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            align-items: center;
-            gap: 2rem;
-            padding: 2rem;
-            background: var(--bg-secondary);
-            border: 1px solid rgba(65, 105, 225, 0.1);
-            border-radius: 12px;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .project-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: var(--royal-blue);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .project-item:hover {
-            border-color: var(--royal-blue);
-            transform: translateX(8px);
-        }
-
-        .project-item:hover::before {
-            opacity: 1;
-        }
-
-        .project-status {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--code-green);
-            box-shadow: 0 0 10px var(--code-green);
-        }
-
-        .project-status.upcoming {
-            background: var(--royal-blue);
-            box-shadow: 0 0 10px var(--royal-blue);
-            animation: pulse 2s ease infinite;
-        }
-
-        .project-info h3 {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .project-info p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .project-role {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            color: var(--royal-blue);
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--royal-blue);
-            border-radius: 4px;
-            white-space: nowrap;
-        }
-
-        /* Specs Section */
-        .specs-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-        }
-
-        .specs-block {
-            background: var(--bg-secondary);
-            border: 1px solid rgba(65, 105, 225, 0.1);
-            border-radius: 16px;
-            overflow: hidden;
-            position: relative;
-            transition: border-color 0.3s ease;
-        }
-
-        .specs-block:hover {
-            border-color: rgba(65, 105, 225, 0.4);
-        }
-
-        .specs-block .aurora-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .specs-block .specs-header,
-        .specs-block .specs-list {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Aurora gradient for symbols */
-        .aurora-char {
-            position: absolute;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
-            color: rgba(65, 105, 225, 0.1);
-            user-select: none;
-            transition: opacity 0.15s ease;
-        }
-
-        .aurora-char.lit {
-            background: linear-gradient(135deg, #4169e1, #00d4aa, #a855f7, #ff6b6b);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: auroraShift 2s ease infinite;
-        }
-
-        @keyframes auroraShift {
-            0%, 100% { background-position: 0% 50%; }
-            25% { background-position: 50% 100%; }
-            50% { background-position: 100% 50%; }
-            75% { background-position: 50% 0%; }
-        }
-
-        /* Project card aurora effect */
-        .project-item {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .project-item .aurora-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .project-item > *:not(.aurora-container) {
-            position: relative;
-            z-index: 1;
-        }
-
-        .project-members {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--code-green);
-            margin-top: 0.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .project-members::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background: var(--code-green);
-            border-radius: 50%;
-            animation: pulse 2s ease infinite;
-        }
-
-        .specs-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1.5rem 2rem;
-            background: var(--bg-tertiary);
-            border-bottom: 1px solid rgba(65, 105, 225, 0.1);
-        }
-
-        .specs-header-icon {
-            font-size: 1.5rem;
-        }
-
-        .specs-header h3 {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .specs-list {
-            padding: 1.5rem 2rem;
-        }
-
-        .spec-row {
+        /* --- Header/Nav --- */
+        nav {
+            padding: 2rem 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 0;
-            border-bottom: 1px solid rgba(65, 105, 225, 0.05);
-        }
-
-        .spec-row:last-child {
-            border-bottom: none;
-        }
-
-        .spec-label {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--mono);
             font-size: 0.8rem;
-            color: var(--text-secondary);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 1px;
         }
 
-        .spec-value {
+        .status-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: #4ade80;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            padding: 10vh 0 15vh;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
             font-weight: 500;
-            color: var(--forest-white);
-            text-align: right;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            margin-bottom: 2rem;
         }
 
-        /* Location Section */
-        .location-banner {
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        .hero-meta {
             display: flex;
-            align-items: center;
-            justify-content: center;
+            gap: 4rem;
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        .hero-meta span {
+            color: var(--text-main);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        /* --- Section Styling --- */
+        section {
+            padding: 6rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .section-label {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+            display: block;
+        }
+
+        /* --- Projects Grid --- */
+        .project-grid {
+            display: grid;
+            grid-template-columns: 1fr;
             gap: 2rem;
-            padding: 4rem;
-            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
-            border: 1px solid rgba(65, 105, 225, 0.1);
-            border-radius: 24px;
-            margin-top: 4rem;
-            position: relative;
-            overflow: hidden;
         }
 
-        .location-banner::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, var(--royal-blue-dim) 0%, transparent 50%);
-            animation: rotate 20s linear infinite;
+        .project-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            text-decoration: none;
+            color: inherit;
+            transition: border-color 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
         }
 
-        .location-icon {
-            font-size: 4rem;
-            position: relative;
-            z-index: 1;
+        .project-card:hover {
+            border-color: var(--accent);
         }
 
-        .location-text {
-            position: relative;
-            z-index: 1;
-        }
-
-        .location-text h3 {
-            font-family: 'Syne', sans-serif;
-            font-size: 2rem;
-            font-weight: 700;
+        .project-card h3 {
+            font-size: 1.5rem;
+            font-weight: 500;
             margin-bottom: 0.5rem;
         }
 
-        .location-text p {
-            font-family: 'JetBrains Mono', monospace;
-            color: var(--text-secondary);
+        .project-card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            max-width: 500px;
         }
 
-        /* Footer */
+        .project-tag {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+        }
+
+        /* --- Skills/Specs --- */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .spec-category h4 {
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .spec-label { color: var(--text-dim); }
+
+        /* --- Footer --- */
         footer {
             padding: 4rem 0;
-            text-align: center;
-            border-top: 1px solid rgba(65, 105, 225, 0.1);
-            margin-top: 4rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--text-dim);
         }
 
-        .footer-logo {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-        }
-
-        .footer-text {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        .footer-text span {
-            color: var(--royal-blue);
-        }
-
-        .footer-inspired {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-            margin-top: 0.5rem;
-        }
-
-        .footer-inspired a {
-            color: var(--royal-blue);
-            text-decoration: none;
-            transition: opacity 0.2s ease;
-        }
-
-        .footer-inspired a:hover {
-            opacity: 0.7;
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        @keyframes glitch-1 {
-            0%, 100% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-        }
-
-        @keyframes glitch-2 {
-            0%, 100% { transform: translate(0); }
-            20% { transform: translate(2px, -2px); }
-            40% { transform: translate(2px, 2px); }
-            60% { transform: translate(-2px, -2px); }
-            80% { transform: translate(-2px, 2px); }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-10px); }
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Scroll Animations */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Responsive */
-        @media (max-width: 900px) {
-            .about-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .specs-container {
-                grid-template-columns: 1fr;
-            }
-
-            .project-item {
-                grid-template-columns: auto 1fr;
-                gap: 1rem;
-            }
-
-            .project-role {
-                grid-column: 1 / -1;
-                text-align: center;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 0 1rem;
-            }
-
-            .terminal-box {
-                padding: 1rem;
-                font-size: 0.75rem;
-            }
-
-            .section-header {
-                flex-wrap: wrap;
-            }
-
-            .section-line {
-                display: none;
-            }
-
-            .location-banner {
-                flex-direction: column;
-                text-align: center;
-                padding: 2rem;
-            }
+        @media (max-width: 768px) {
+            .hero-meta { flex-direction: column; gap: 1.5rem; }
+            .project-card { flex-direction: column; gap: 1rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Code Rain Background -->
-    <canvas id="code-rain"></canvas>
-    
-    <!-- Overlays -->
-    <div class="noise-overlay"></div>
-    <div class="grid-lines"></div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-badge">
-                <span class="badge-dot"></span>
-                AVAILABLE FOR PROJECTS
+    <div class="container">
+        <nav>
+            <div>Patentt</div>
+            <div>
+                <span class="status-dot"></span>
+                Available for Collaboration
             </div>
-            
-            <h1 class="hero-name">
-                <span class="glitch" data-decrypt="PATENTT">PATENTT</span>
-            </h1>
-            
-            <p class="hero-title"><span>//</span> DEVELOPER <span>&</span> CS PLAYER</p>
-            
-            <div class="terminal-box">
-                <div class="terminal-header">
-                    <span class="terminal-dot red"></span>
-                    <span class="terminal-dot yellow"></span>
-                    <span class="terminal-dot green"></span>
-                </div>
-                <div class="terminal-line">
-                    <span class="terminal-prompt">→</span>
-                    <span class="terminal-text">whoami</span>
-                </div>
-                <div class="terminal-line">
-                    <span class="terminal-prompt"></span>
-                    <span class="terminal-text"><span class="highlight">Patentt</span> — Developer based in Bucharest, Romania</span>
-                </div>
-                <div class="terminal-line">
-                    <span class="terminal-prompt">→</span>
-                    <span class="terminal-text">cat skills.txt</span>
-                </div>
-                <div class="terminal-line">
-                    <span class="terminal-prompt"></span>
-                    <span class="terminal-text">Minecraft Dev • Roblox Dev • Game Development • Grinding CS<span class="terminal-cursor"></span></span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="scroll-indicator">
-            <span>SCROLL</span>
-            <div class="scroll-arrow"></div>
-        </div>
-    </section>
+        </nav>
 
-    <!-- About Section -->
-    <section id="about">
-        <div class="container">
-            <div class="section-header fade-in">
-                <span class="section-number">01</span>
-                <h2 class="section-title">About Me</h2>
-                <div class="section-line"></div>
-            </div>
+        <header class="hero">
+            <h1>Building digital <br>infrastructure.</h1>
+            <p>Software Engineer and Founder based in Bucharest. Specializing in high-scale server environments and immersive platform development.</p>
             
-            <div class="about-grid">
-                <div class="about-card fade-in">
-                    <div class="about-card-icon">🎮</div>
-                    <h3 class="about-card-title">Dedicated CS Player</h3>
-                    <p class="about-card-text">
-                        On the grind. Constantly improving mechanics, game sense, and pushing to compete at higher levels. Counter-Strike isn't just a game — it's the discipline.
-                    </p>
-                    <span class="about-card-tag">COMPETITIVE</span>
+            <div class="hero-meta">
+                <div>
+                    <span>Location</span>
+                    Bucharest, RO
                 </div>
-                
-                <div class="about-card fade-in">
-                    <div class="about-card-icon">⚡</div>
-                    <h3 class="about-card-title">Game Developer</h3>
-                    <p class="about-card-text">
-                        Building experiences across Minecraft and Roblox platforms. From server infrastructure to gameplay mechanics — I craft worlds players want to live in.
-                    </p>
-                    <span class="about-card-tag">CREATIVE</span>
+                <div>
+                    <span>Role</span>
+                    Full-Stack Developer
                 </div>
-                
-                <div class="about-card fade-in">
-                    <div class="about-card-icon">🚀</div>
-                    <h3 class="about-card-title">Founder & Owner</h3>
-                    <p class="about-card-text">
-                        Building Carbongenss from the ground up. Entrepreneurship meets development — creating something meaningful one commit at a time.
-                    </p>
-                    <span class="about-card-tag">ENTREPRENEUR</span>
-                </div>
-                
-                <div class="about-card fade-in">
-                    <div class="about-card-icon">📍</div>
-                    <h3 class="about-card-title">Based in Bucharest</h3>
-                    <p class="about-card-text">
-                        Working from Romania's capital. European timezone, global mindset. Always connected, always shipping.
-                    </p>
-                    <span class="about-card-tag">ROMANIA</span>
+                <div>
+                    <span>Founder</span>
+                    Carbongenss
                 </div>
             </div>
-        </div>
-    </section>
+        </header>
 
-    <!-- Projects Section -->
-    <section id="projects">
-        <div class="container">
-            <div class="section-header fade-in">
-                <span class="section-number">02</span>
-                <h2 class="section-title">Projects</h2>
-                <div class="section-line"></div>
-            </div>
-            
-            <div class="projects-list">
-                <div class="project-item fade-in" data-aurora="true">
-                    <div class="aurora-container"></div>
-                    <div class="project-status"></div>
-                    <div class="project-info">
-                        <h3>PolarisMC 4421</h3>
-                        <p>Minecraft server development — crafting unique gameplay experiences and server infrastructure</p>
-                        <div class="project-members">4,421 members</div>
+        <section id="projects">
+            <span class="section-label">Selected Works</span>
+            <div class="project-grid">
+                
+                <div class="project-card">
+                    <div>
+                        <h3>PolarisMC</h3>
+                        <p>Architecting server infrastructure and custom gameplay mechanics for a community of 4,400+ members.</p>
                     </div>
-                    <span class="project-role">DEVELOPER</span>
+                    <span class="project-tag">Systems Engineering</span>
                 </div>
-                
-                <div class="project-item fade-in">
-                    <div class="project-status upcoming"></div>
-                    <div class="project-info">
+
+                <div class="project-card">
+                    <div>
                         <h3>Heaven of Sins</h3>
-                        <p>Upcoming Roblox asymmetrical multiplayer game — pushing the boundaries of what's possible</p>
+                        <p>Development of an asymmetrical multiplayer experience on the Roblox platform, focusing on performant networking.</p>
                     </div>
-                    <span class="project-role">DEVELOPER</span>
+                    <span class="project-tag">Game Development</span>
                 </div>
-                
-                <div class="project-item fade-in">
-                    <div class="project-status"></div>
-                    <div class="project-info">
+
+                <div class="project-card">
+                    <div>
                         <h3>Carbongenss</h3>
-                        <p>Building something from scratch — founder vision meets technical execution</p>
+                        <p>Technical leadership and founding vision for a new era of digital products.</p>
                     </div>
-                    <span class="project-role">OWNER & FOUNDER</span>
+                    <span class="project-tag">Lead Architect</span>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="specs">
+            <span class="section-label">Technical Stack & Hardware</span>
+            <div class="specs-grid">
+                <div class="spec-category">
+                    <h4>Development</h4>
+                    <div class="spec-item"><span class="spec-label">Runtime</span><span>Java / Luau</span></div>
+                    <div class="spec-item"><span class="spec-label">Environments</span><span>Minecraft / Roblox</span></div>
+                    <div class="spec-item"><span class="spec-label">Tools</span><span>Git / IntelliJ / VS Code</span></div>
+                </div>
+                <div class="spec-category">
+                    <h4>Workstation</h4>
+                    <div class="spec-item"><span class="spec-label">CPU</span><span>Ryzen 7 5800X</span></div>
+                    <div class="spec-item"><span class="spec-label">GPU</span><span>Radeon RX 6600</span></div>
+                    <div class="spec-item"><span class="spec-label">Display</span><span>Samsung Odyssey G3</span></div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Specs Section -->
-    <section id="specs">
-        <div class="container">
-            <div class="section-header fade-in">
-                <span class="section-number">03</span>
-                <h2 class="section-title">Setup</h2>
-                <div class="section-line"></div>
-            </div>
-            
-            <div class="specs-container">
-                <div class="specs-block fade-in" data-aurora="true">
-                    <div class="aurora-canvas"></div>
-                    <div class="specs-header">
-                        <span class="specs-header-icon">🖥️</span>
-                        <h3>Main PC</h3>
-                    </div>
-                    <div class="specs-list">
-                        <div class="spec-row">
-                            <span class="spec-label">CPU</span>
-                            <span class="spec-value">AMD Ryzen 7 5800X</span>
-                        </div>
-                        <div class="spec-row">
-                            <span class="spec-label">GPU</span>
-                            <span class="spec-value">AMD Radeon RX 6600</span>
-                        </div>
-                        <div class="spec-row">
-                            <span class="spec-label">RAM</span>
-                            <span class="spec-value">32GB Corsair</span>
-                        </div>
-                        <div class="spec-row">
-                            <span class="spec-label">Case</span>
-                            <span class="spec-value">1st Player Aquarium</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="specs-block fade-in" data-aurora="true">
-                    <div class="aurora-canvas"></div>
-                    <div class="specs-header">
-                        <span class="specs-header-icon">⌨️</span>
-                        <h3>Peripherals</h3>
-                    </div>
-                    <div class="specs-list">
-                        <div class="spec-row">
-                            <span class="spec-label">Mouse</span>
-                            <span class="spec-value">Logitech Superlight 2 SE</span>
-                        </div>
-                        <div class="spec-row">
-                            <span class="spec-label">Keyboard</span>
-                            <span class="spec-value">Gamakay K61</span>
-                        </div>
-                        <div class="spec-row">
-                            <span class="spec-label">Monitor</span>
-                            <span class="spec-value">Samsung Odyssey G3</span>
-                        </div>
-                        <div class="spec-row">
-                            <span class="spec-label">Headset</span>
-                            <span class="spec-value">HyperX</span>
-                        </div>
-                        <div class="spec-row">
-                            <span class="spec-label">Microphone</span>
-                            <span class="spec-value">Razer Mini V3</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="location-banner fade-in">
-                <div class="location-icon">🇷🇴</div>
-                <div class="location-text">
-                    <h3>Bucharest, Romania</h3>
-                    <p>GMT+2 • Eastern European Time</p>
-                </div>
-            </div>
-        </div>
-    </section>
+        <footer>
+            <div>© 2026 Patentt</div>
+            <div>Bucharest — 44°26'N 26°06'E</div>
+        </footer>
+    </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-logo">PATENTT</div>
-            <p class="footer-text">Built with <span>♥</span> and caffeine</p>
-            <p class="footer-inspired">inspired by <a href="https://neokcs.com" target="_blank">neokcs.com</a></p>
-        </div>
-    </footer>
-
-    <script>
-        // Code Rain Animation
-        const canvas = document.getElementById('code-rain');
-        const ctx = canvas.getContext('2d');
-
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const chars = 'PATENTT01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン{}[]<>/\\;:=+-*&^%$#@!~`|';
-        const charArray = chars.split('');
-        const fontSize = 14;
-        const columns = canvas.width / fontSize;
-        const drops = [];
-
-        for (let i = 0; i < columns; i++) {
-            drops[i] = Math.random() * -100;
-        }
-
-        function drawCodeRain() {
-            ctx.fillStyle = 'rgba(5, 5, 8, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = '#4169e1';
-            ctx.font = fontSize + 'px JetBrains Mono';
-
-            for (let i = 0; i < drops.length; i++) {
-                const char = charArray[Math.floor(Math.random() * charArray.length)];
-                const x = i * fontSize;
-                const y = drops[i] * fontSize;
-
-                ctx.fillText(char, x, y);
-
-                if (y > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
-        }
-
-        setInterval(drawCodeRain, 50);
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        // Scroll Animations
-        const fadeElements = document.querySelectorAll('.fade-in');
-
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        fadeElements.forEach(el => observer.observe(el));
-
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // Aurora Symbol Background Effect
-        const auroraSymbols = '{}[]<>/*-+=#@$%^&|~`;:!?→←↑↓◆◇○●□■△▽₿∞∑√≈≠≤≥';
-        const auroraElements = document.querySelectorAll('[data-aurora="true"]');
-        
-        auroraElements.forEach(element => {
-            const container = element.querySelector('.aurora-canvas, .aurora-container');
-            if (!container) return;
-            
-            const cellWidth = 20;
-            const cellHeight = 22;
-            let symbols = [];
-            let isHovering = false;
-            let mouseX = 0;
-            let mouseY = 0;
-            
-            function createSymbols() {
-                container.innerHTML = '';
-                symbols = [];
-                
-                const rect = element.getBoundingClientRect();
-                const cols = Math.ceil(rect.width / cellWidth);
-                const rows = Math.ceil(rect.height / cellHeight);
-                
-                for (let row = 0; row < rows; row++) {
-                    for (let col = 0; col < cols; col++) {
-                        const span = document.createElement('span');
-                        span.className = 'aurora-char';
-                        span.textContent = auroraSymbols[Math.floor(Math.random() * auroraSymbols.length)];
-                        
-                        const x = col * cellWidth;
-                        const y = row * cellHeight;
-                        
-                        span.style.left = x + 'px';
-                        span.style.top = y + 'px';
-                        
-                        container.appendChild(span);
-                        symbols.push({
-                            el: span,
-                            centerX: x + cellWidth / 2,
-                            centerY: y + cellHeight / 2
-                        });
-                    }
-                }
-            }
-            
-            createSymbols();
-            
-            function updateGlow() {
-                if (!isHovering) return;
-                
-                const rect = element.getBoundingClientRect();
-                const relX = mouseX - rect.left;
-                const relY = mouseY - rect.top;
-                const radius = 100;
-                
-                symbols.forEach(symbol => {
-                    const dx = symbol.centerX - relX;
-                    const dy = symbol.centerY - relY;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (distance < radius) {
-                        const opacity = 1 - (distance / radius);
-                        symbol.el.classList.add('lit');
-                        symbol.el.style.opacity = opacity;
-                        if (Math.random() < 0.008) {
-                            symbol.el.textContent = auroraSymbols[Math.floor(Math.random() * auroraSymbols.length)];
-                        }
-                    } else {
-                        symbol.el.classList.remove('lit');
-                        symbol.el.style.opacity = '';
-                    }
-                });
-                
-                requestAnimationFrame(updateGlow);
-            }
-            
-            element.addEventListener('mouseenter', () => {
-                isHovering = true;
-                requestAnimationFrame(updateGlow);
-            });
-            
-            element.addEventListener('mouseleave', () => {
-                isHovering = false;
-                symbols.forEach(s => {
-                    s.el.classList.remove('lit');
-                    s.el.style.opacity = '';
-                });
-            });
-            
-            element.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-            });
-            
-            window.addEventListener('resize', createSymbols);
-        });
-
-        // Evervault-style Decrypt Text Effect
-        const decryptChars = '!@#$%^&*()_+-=[]{}|;:,.<>?/~`0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-        const decryptElements = document.querySelectorAll('[data-decrypt]');
-        
-        decryptElements.forEach(el => {
-            const originalText = el.getAttribute('data-decrypt');
-            const duration = 2000;
-            const frameRate = 30;
-            const totalFrames = duration / (1000 / frameRate);
-            let frame = 0;
-            
-            function decrypt() {
-                let output = '';
-                const progress = frame / totalFrames;
-                
-                for (let i = 0; i < originalText.length; i++) {
-                    const charProgress = (progress * originalText.length) - i;
-                    
-                    if (charProgress > 1) {
-                        output += originalText[i];
-                    } else if (charProgress > 0) {
-                        // Scrambling phase
-                        output += decryptChars[Math.floor(Math.random() * decryptChars.length)];
-                    } else {
-                        output += decryptChars[Math.floor(Math.random() * decryptChars.length)];
-                    }
-                }
-                
-                el.textContent = output;
-                frame++;
-                
-                if (frame <= totalFrames) {
-                    requestAnimationFrame(decrypt);
-                } else {
-                    el.textContent = originalText;
-                    el.classList.add('decrypted');
-                }
-            }
-            
-            // Start after a short delay
-            setTimeout(decrypt, 500);
-        });
-    </script>
 </body>
 </html>

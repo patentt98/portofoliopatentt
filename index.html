@@ -10,9 +10,9 @@
     <style>
         :root {
             --bg: #050505;
-            --card-bg: rgba(20, 20, 20, 0.6);
+            --card-bg: rgba(18, 18, 18, 0.7);
             --card-border: rgba(255, 255, 255, 0.08);
-            --accent-blue: #3b82f6;
+            --accent-blue: #60a5fa;
             --text-main: #ffffff;
             --text-muted: #a1a1aa;
             --font-sans: 'Plus Jakarta Sans', sans-serif;
@@ -29,12 +29,12 @@
             overflow-x: hidden;
         }
 
-        /* Modern Gradient Background */
+        /* Subtle Modern Background Gradient */
         .bg-glow {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% -20%, #1e293b 0%, transparent 50%),
-                        radial-gradient(circle at 0% 100%, #0f172a 0%, transparent 40%);
+            background: radial-gradient(circle at 80% 0%, #1e293b 0%, transparent 40%),
+                        radial-gradient(circle at 20% 100%, #0f172a 0%, transparent 40%);
             z-index: -1;
         }
 
@@ -44,69 +44,91 @@
             padding: 4rem 2rem;
         }
 
-        /* --- Bento Grid Layout --- */
         .bento-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: auto;
-            gap: 1.5rem;
+            gap: 1.25rem;
         }
 
         .card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 24px;
-            padding: 2rem;
-            backdrop-filter: blur(12px);
-            transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1), border-color 0.3s ease;
+            border-radius: 28px;
+            padding: 2.25rem;
+            backdrop-filter: blur(16px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .card:hover {
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(25, 25, 25, 0.8);
+            transform: scale(1.02);
         }
 
-        /* --- Specific Bento Cards --- */
+        /* --- Grid Assignments --- */
         .card-hero { grid-column: span 3; }
-        .card-status { grid-column: span 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        .card-project-lg { grid-column: span 2; }
-        .card-project-sm { grid-column: span 1; }
-        .card-specs { grid-column: span 2; }
+        .card-status { grid-column: span 1; text-align: center; align-items: center; }
+        .card-main-project { grid-column: span 2; }
+        .card-spec-grid { grid-column: span 2; }
+        .card-sm { grid-column: span 1; }
+        .card-med { grid-column: span 2; }
 
         /* --- Typography --- */
-        h1 { font-size: 3.5rem; font-weight: 700; letter-spacing: -0.04em; margin-bottom: 1rem; line-height: 1.1; }
-        h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem; }
-        p { color: var(--text-muted); line-height: 1.6; font-size: 1rem; }
-        .mono { font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-blue); }
-
-        /* --- Visual Elements --- */
-        .status-indicator {
-            width: 12px; height: 12px; background: #22c55e; border-radius: 50%;
-            box-shadow: 0 0 20px #22c55e; margin-bottom: 1rem;
+        h1 { font-size: 3.75rem; font-weight: 700; letter-spacing: -0.05em; margin-bottom: 1.5rem; line-height: 1; }
+        h2 { font-size: 1.6rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--text-main); }
+        p { color: var(--text-muted); line-height: 1.6; font-size: 1.05rem; }
+        
+        .label { 
+            font-family: var(--font-mono); 
+            font-size: 0.7rem; 
+            text-transform: uppercase; 
+            letter-spacing: 0.15em; 
+            color: var(--accent-blue);
+            margin-bottom: 1rem;
+            display: block;
         }
 
-        .spec-list { margin-top: 1.5rem; }
-        .spec-row {
+        .stat-value { font-size: 2.5rem; font-weight: 700; color: var(--text-main); margin-top: 0.5rem; }
+
+        /* --- Utility --- */
+        .status-pulse {
+            width: 10px; height: 10px; background: #22c55e; border-radius: 50%;
+            box-shadow: 0 0 15px #22c55e; margin-bottom: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        .spec-item {
             display: flex; justify-content: space-between;
-            padding: 0.75rem 0; border-bottom: 1px solid var(--card-border);
+            padding: 0.85rem 0; border-bottom: 1px solid var(--card-border);
+            font-size: 0.95rem;
         }
 
         .tag {
-            display: inline-block; padding: 4px 12px; border-radius: 100px;
-            background: rgba(255,255,255,0.05); font-size: 0.75rem; margin-top: 1rem;
+            display: inline-block; padding: 6px 14px; border-radius: 12px;
+            background: rgba(255,255,255,0.04); font-size: 0.8rem; font-weight: 500;
         }
 
         /* --- Responsive --- */
-        @media (max-width: 900px) {
+        @media (max-width: 950px) {
             .bento-grid { grid-template-columns: repeat(2, 1fr); }
-            .card-hero, .card-project-lg, .card-specs { grid-column: span 2; }
-            .card-status, .card-project-sm { grid-column: span 1; }
+            .card-hero, .card-main-project, .card-spec-grid, .card-med { grid-column: span 2; }
+            .card-status, .card-sm { grid-column: span 1; }
         }
 
         @media (max-width: 600px) {
             .bento-grid { grid-template-columns: 1fr; }
             .card { grid-column: span 1 !important; }
-            h1 { font-size: 2.5rem; }
+            h1 { font-size: 2.75rem; }
         }
     </style>
 </head>
@@ -118,57 +140,74 @@
         <div class="bento-grid">
             
             <div class="card card-hero">
-                <span class="mono">Systems Engineer & Founder</span>
-                <h1>Designing scalable <br>digital architectures.</h1>
-                <p>Based in Bucharest. Focused on building high-performance server environments and immersive platform ecosystems.</p>
-            </div>
-
-            <div class="card card-status">
-                <div class="status-indicator"></div>
-                <span class="mono">Current Status</span>
-                <p style="color: var(--text-main); font-weight: 500; margin-top: 0.5rem;">Available for <br>Core Projects</p>
-            </div>
-
-            <div class="card card-project-lg">
-                <span class="mono">Infrastructure</span>
-                <h2>PolarisMC</h2>
-                <p>Developing robust server frameworks for a concurrent user base of 4,400+. Focus on low-latency systems and custom Luau/Java implementations.</p>
-                <div class="tag">System Design</div>
-            </div>
-
-            <div class="card card-project-sm">
-                <span class="mono">Venture</span>
-                <h2>Carbongenss</h2>
-                <p>Technical leadership and product development.</p>
-                <div class="tag">Founder</div>
-            </div>
-
-            <div class="card card-specs">
-                <span class="mono">Workstation Specs</span>
-                <div class="spec-list">
-                    <div class="spec-row"><span style="color:var(--text-muted)">Engine</span><span>Ryzen 7 5800X</span></div>
-                    <div class="spec-row"><span style="color:var(--text-muted)">Memory</span><span>32GB DDR4</span></div>
-                    <div class="spec-row"><span style="color:var(--text-muted)">Output</span><span>Samsung Odyssey G3</span></div>
-                    <div class="spec-row"><span style="color:var(--text-muted)">Input</span><span>Superlight 2 SE</span></div>
+                <div>
+                    <span class="label">Software & Systems</span>
+                    <h1>Engineering digital <br>experiences.</h1>
+                    <p>Based in Bucharest. Focused on high-scale infrastructure and performance-driven development.</p>
                 </div>
             </div>
 
-            <div class="card card-project-sm">
-                <span class="mono">Roblox Engineering</span>
-                <h2>Heaven of Sins</h2>
-                <p>Asymmetrical networking & mechanics.</p>
+            <div class="card card-status">
+                <div class="status-pulse"></div>
+                <span class="label">Status</span>
+                <p style="color: var(--text-main); font-weight: 600;">Available for<br>Contract</p>
             </div>
 
-            <div class="card card-project-sm" style="display: flex; flex-direction: column; justify-content: center; background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), transparent);">
-                <span class="mono">Location</span>
-                <h2 style="margin-bottom: 0;">Bucharest, RO</h2>
-                <p>GMT +2</p>
+            <div class="card card-main-project">
+                <div>
+                    <span class="label">Community Infrastructure</span>
+                    <h2>PolarisMC</h2>
+                    <p>Architecting custom gameplay frameworks and backend systems for a massive user base.</p>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 2rem;">
+                    <div>
+                        <p style="font-size: 0.8rem;">Discord Community</p>
+                        <div class="stat-value">5,500+</div>
+                    </div>
+                    <div class="tag">Systems Lead</div>
+                </div>
+            </div>
+
+            <div class="card card-spec-grid">
+                <span class="label">Workstation Configuration</span>
+                <div style="margin-top: 1rem;">
+                    <div class="spec-item"><span style="color:var(--text-muted)">Processor</span><span>AMD Ryzen 7 5800X</span></div>
+                    <div class="spec-item"><span style="color:var(--text-muted)">Memory</span><span>32GB Corsair DDR4</span></div>
+                    <div class="spec-item"><span style="color:var(--text-muted)">Graphics</span><span>AMD Radeon RX 6600</span></div>
+                    <div class="spec-item"><span style="color:var(--text-muted)">Peripheral</span><span>Logitech Superlight 2 SE</span></div>
+                </div>
+            </div>
+
+            <div class="card card-sm">
+                <div>
+                    <span class="label">Project</span>
+                    <h2>Carbongenss</h2>
+                    <p>Proprietary software project developed for performance optimization.</p>
+                </div>
+                <div class="tag" style="margin-top: 1rem;">Independent</div>
+            </div>
+
+            <div class="card card-sm">
+                <div>
+                    <span class="label">Engineering</span>
+                    <h2>Heaven of Sins</h2>
+                    <p>Multiplayer networking on the Roblox platform.</p>
+                </div>
+                <div class="tag" style="margin-top: 1rem;">Development</div>
+            </div>
+
+            <div class="card card-med" style="background: linear-gradient(135deg, rgba(96, 165, 250, 0.08), transparent);">
+                <div>
+                    <span class="label">Location</span>
+                    <h2 style="font-size: 2rem; margin: 0;">Bucharest, RO</h2>
+                    <p>Eastern European Time (GMT+2)</p>
+                </div>
             </div>
 
         </div>
 
-        <footer style="margin-top: 4rem; text-align: center; color: var(--text-muted); font-size: 0.8rem;">
-            <p>&copy; 2026 Patentt. Built for performance.</p>
+        <footer style="margin-top: 4rem; padding-bottom: 2rem; text-align: center; color: var(--text-muted); font-size: 0.85rem; font-family: var(--font-mono);">
+            <p>PATENTT // 2026. Built with precision.</p>
         </footer>
     </main>
 
